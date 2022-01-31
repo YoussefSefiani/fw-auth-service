@@ -24,16 +24,24 @@ public class Brand {
     @JoinColumn(name= "user_id")
     private User user;
 
+    @JoinColumn(name = "user_id")
+    @OneToMany(cascade = CascadeType.ALL)
     private List<SocialMedia> socialMedia;
 
     private String headTitle;
 
     private String description;
 
+    @JoinColumn(name = "user_id")
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Language> languages;
 
+    @JoinColumn(name = "user_id")
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Country> countries;
 
+    @JoinColumn(name = "user_id")
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Sector> sectors;
 
     private String offers;
