@@ -36,25 +36,25 @@ public class InfluencerController {
 
         LocalDate dummyDate = LocalDate.of(2000,02,04);
 
-        User dummyUser = new User(
-                null,
-                "testinfluencer",
-                "pass",
-                "ayoub@hotmail.com",
-                32489245740L,
-                "teststreet",
-                dummyDate
-
-        );
-
-        Influencer dummyInfluencer = new Influencer(
-                null,
-                dummyUser,
-                "here influencer"
-        );
-
-
-        influencerService.registerInfluencer(dummyInfluencer);
+//        User dummyUser = new User(
+//                null,
+//                "testinfluencer",
+//                "pass",
+//                "ayoub@hotmail.com",
+//                32489245740L,
+//                "teststreet",
+//                dummyDate
+//
+//        );
+//
+//        Influencer dummyInfluencer = new Influencer(
+//                null,
+//                dummyUser,
+//                "here influencer"
+//        );
+//
+//
+//        influencerService.registerInfluencer(dummyInfluencer);
     }
 
 }
