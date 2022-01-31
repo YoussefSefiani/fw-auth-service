@@ -21,7 +21,6 @@ public class BrandService {
 
         if(userService.checkUsername(brand.getUser()))
             brandRepository.save(brand);
-
     }
 
 }

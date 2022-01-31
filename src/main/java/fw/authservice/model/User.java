@@ -23,6 +23,12 @@ public class User {
     )
     private Long id;
 
+    @NotBlank(message = "firstname must be not empty")
+    private String firstName;
+
+    @NotBlank(message = "lastname must be not empty")
+    private String lastName;
+
    // @Column(unique = true)
     @NotBlank(message = "username must be not empty")
     private String username;
@@ -43,6 +49,11 @@ public class User {
 
     private LocalDate birthdate;
 
-    //TODO: Missing types
+    private String profilePicture;
+
+    private int rating;
+
+    private UserType userType;
+
 
 }

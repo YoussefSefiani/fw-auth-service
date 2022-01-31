@@ -23,7 +23,7 @@ public class Influencer {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private String test;
+    private String ibanNumber;
 
     public User getUser() {
         return user;
