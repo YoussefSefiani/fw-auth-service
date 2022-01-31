@@ -1,2 +1,5 @@
-package fw.authservice.model;public enum Languages {
+package fw.authservice.model;
+
+public enum Language {
+    FRENCH, DUTCH, ENGLISH
 }

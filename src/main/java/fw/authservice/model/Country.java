@@ -1,2 +1,5 @@
-package fw.authservice.model;public class Country {
+package fw.authservice.model;
+
+public enum Country {
+    BELGIUM, FRANCE, NETHERLANDS
 }
