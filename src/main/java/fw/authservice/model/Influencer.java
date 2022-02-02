@@ -26,7 +26,6 @@ public class Influencer {
 
     private String ibanNumber;
 
-
     @JoinColumn(name = "user_id")
     @OneToMany(cascade = CascadeType.ALL)
     private List<SocialMedia> socialMedia;

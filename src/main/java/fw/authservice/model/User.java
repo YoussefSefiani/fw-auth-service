@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 
 @Entity
-@Table
+@Table(name = "User")
 @ToString
 @Getter
 @Setter
@@ -31,7 +31,7 @@ public class User {
 
    // @Column(unique = true)
     @NotBlank(message = "username must be not empty")
-    private String username;
+    private String userName;
 
     @NotBlank(message = "password must be not empty")
    // @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -44,16 +44,12 @@ public class User {
 
    // @Column(unique = true)
     private Long phoneNumber;
-
     private String address;
-
     private LocalDate birthdate;
-
     private String profilePicture;
-
     private int rating;
-
     private UserType userType;
-
+    private boolean active;
+    private String roles;
 
 }

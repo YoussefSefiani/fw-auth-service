@@ -46,21 +46,21 @@ public class BrandController {
                 SectorList.IT.name(), SectorList.FINANCE.name()
         );
 
-        User dummyUser = new User(
-                null,
-                "Youssefbrand",
-                "Sefianibrand",
-                "testbrand",
-                "pass",
-                "ayoub@hotmail.com",
-                32489245740L,
-                "teststreetbrand",
-                dummyDate,
-                "profilepicture",
-                5,
-                UserType.BRAND
-
-        );
+//        User dummyUser = new User(
+//                null,
+//                "Youssefbrand",
+//                "Sefianibrand",
+//                "testbrand",
+//                "pass",
+//                "ayoub@hotmail.com",
+//                32489245740L,
+//                "teststreetbrand",
+//                dummyDate,
+//                "profilepicture",
+//                5,
+//                UserType.BRAND
+//
+//        );
 
 //        Brand dummyBrand = new Brand(
 //                null,
