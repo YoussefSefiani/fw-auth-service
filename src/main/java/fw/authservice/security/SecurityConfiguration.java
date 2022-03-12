@@ -8,6 +8,7 @@ import fw.authservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -29,16 +30,14 @@ import javax.crypto.SecretKey;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final PasswordEncoder passwordEncoder;
-    //private final InfluencerService influencerService;
     private final UserDetailsService userDetailsService;
     private final SecretKey secretKey;
     private final JwtConfig jwtConfig;
 
     @Autowired
-    public SecurityConfiguration(PasswordEncoder passwordEncoder, /*InfluencerService influencerService,*/ UserDetailsService userDetailsService, SecretKey secretKey, JwtConfig jwtConfig) {
+    public SecurityConfiguration(PasswordEncoder passwordEncoder, UserDetailsService userDetailsService, SecretKey secretKey, JwtConfig jwtConfig) {
         this.passwordEncoder = passwordEncoder;
         this.userDetailsService = userDetailsService;
-        //this.influencerService = influencerService;
         this.secretKey = secretKey;
         this.jwtConfig = jwtConfig;
     }
@@ -51,32 +50,23 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-            .csrf()
-            .disable()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .cors()
                 .and()
-                .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig, secretKey)) // authentificationManager comes from extended class
-                .addFilterAfter(new JwtTokenVerifier(secretKey, jwtConfig), JwtUsernameAndPasswordAuthenticationFilter.class)
-//                .authorizeRequests()
-//                .antMatchers("/api/influencer").permitAll()
-//                 .antMatchers(HttpMethod.GET, "/api/influencer/**").permitAll()
-//                .antMatchers("/")
-//                .permitAll()
-//                .and()
-//               .permitAll()
-//                .formLogin();
-//                .and()
-//                .httpBasic();
+                .csrf()
+                .disable()
+                    .sessionManagement()
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                    .and()
+                    .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig, secretKey)) // authentificationManager comes from extended class
+                    .addFilterAfter(new JwtTokenVerifier(secretKey, jwtConfig), JwtUsernameAndPasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                //.antMatchers("/").hasRole("ADMIN")
-               .antMatchers("/api/influencer").hasAuthority("USER")
-                //.antMatchers("/").authenticated()
-                //.antMatchers("/").permitAll();
+                .antMatchers(HttpMethod.GET,"/api/user").hasAuthority("USER")
+                .antMatchers(HttpMethod.POST,"/api/user/dummy").permitAll()
+                .antMatchers(HttpMethod.POST, "/login").permitAll()
                 .anyRequest()
-                .authenticated();
-
-              //  .and().formLogin();
+                .authenticated()
+                .and()
+                .httpBasic();
 
 
     }

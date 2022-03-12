@@ -1,12 +1,15 @@
 package fw.authservice.model;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Table(name = "User")
@@ -45,7 +48,12 @@ public class User {
    // @Column(unique = true)
     private Long phoneNumber;
     private String address;
-    private LocalDate birthdate;
+
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(style = "yyyy:dd:MM")
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy:dd:MM")
+    private Date birthdate;
+
     private String profilePicture;
     private int rating;
     private UserType userType;

@@ -7,21 +7,23 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
 public class UserService {
 
-    @Autowired
-    private RestTemplate restTemplate;
-
+    private final RestTemplate restTemplate;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(RestTemplate restTemplate, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.restTemplate = restTemplate;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -38,49 +40,58 @@ public class UserService {
                 ));
 
     }
+    public void registerUser(User user) throws Exception {
+        try {
+            System.out.println(user);
+            Optional<User> userOptional = userRepository.findByUserNameEqualsIgnoreCase(user.getUserName());
+            System.out.println(userOptional);
 
-    public void registerDummyUser(String username) {
-
-        LocalDate dummyDate = LocalDate.of(2000,02,04);
-
-        User dummyUser = new User(
-                null,
-                "Youssef",
-                "Sefiani",
-                username,
-                passwordEncoder.encode("password"),
-                "ayoub@hotmail.com",
-                32489245740L,
-                "teststreet",
-                dummyDate,
-                "profilepicture",
-                5,
-                UserType.INFLUENCER,
-                true,
-                "USER"
-        );
-
-
-
-        if (checkUsername(dummyUser)) {
-            dummyUser = userRepository.save(dummyUser);
+            if (userOptional.isEmpty()) {
+                System.out.println(user.getBirthdate());
+                Date newBirthDate = new Date(user.getBirthdate().getYear(), user.getBirthdate().getMonth(), user.getBirthdate().getDay());
+                user.setBirthdate(newBirthDate);
+                String encryptedPassword = passwordEncoder.encode(user.getPassword());
+                user.setPassword(encryptedPassword);
+                userRepository.save(user);
+                Long userId = user.getId();
+                RegisterRequest registerRequest = new RegisterRequest(userId, user.getUserType());
+                restTemplate.postForObject("http://fw-profile-service/api/influencer", registerRequest, RegisterRequest.class);
+            } else {
+                throw new IllegalStateException(String.format("User with username %s already exists", userOptional.get().getUserName()));
+            }
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e);
         }
-
-        Long userId = dummyUser.getId();
-        RegisterRequest registerRequest = new RegisterRequest(userId, dummyUser.getUserType());
-
-        restTemplate.postForObject("http://fw-profile-service/api/influencer/dummy", registerRequest, RegisterRequest.class);
-
     }
 
-    public void registerUser(User user) {
-//        Optional<Influencer> influencerOptional = influencerRepository.findInfluencerByUsername(influencer.getUser().getUsername());
-//
-//        if (influencerOptional.isPresent())
-//            influencerRepository.save(influencer);
-        if (checkUsername(user))
-            userRepository.save(user);
+    @Transactional
+    public void updateUser(Long userId, User newUser) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalStateException(
+                        "user with id" + userId + "does not exist"
+                ));
 
+        String username = newUser.getUserName();
+        String password = newUser.getPassword() != null ? passwordEncoder.encode(newUser.getPassword()) : user.getPassword();
+
+        if(username != null && username.length() > 0 && !Objects.equals(user.getUserName(), username)) {
+            user.setUserName(username);
+        } else if(Objects.equals(user.getUserName(), username)) {
+            throw new IllegalStateException(String.format("User with username %s already exists", username));
+        }
+
+        if(password != null && password.length() > 0 && !Objects.equals(user.getPassword(), password)) {
+            user.setPassword(password);
+        }
+    }
+
+    public boolean checkUsername(User user) {
+        Optional<User> userOptional = userRepository
+                .findByUserNameEqualsIgnoreCase(user.getUserName());
+        if(userOptional.isPresent()) {
+            throw new IllegalStateException("username already taken");
+        }
+        return true;
     }
 
     public void deleteUser(Long userId) {
@@ -92,14 +103,4 @@ public class UserService {
         userRepository.deleteById(userId);
     }
 
-    //TODO: update user route
-
-    public boolean checkUsername(User user) {
-        Optional<User> userOptional = userRepository
-                .findByUserNameEqualsIgnoreCase(user.getUserName());
-        if(userOptional.isPresent()) {
-            throw new IllegalStateException("username already taken");
-        }
-        return true;
-    }
 }
