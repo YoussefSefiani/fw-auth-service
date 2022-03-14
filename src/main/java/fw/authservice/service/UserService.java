@@ -65,22 +65,33 @@ public class UserService {
 
     @Transactional
     public void updateUser(Long userId, User newUser) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalStateException(
-                        "user with id" + userId + "does not exist"
-                ));
+        try {
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new IllegalStateException(
+                            "user with id" + userId + "does not exist"
+                    ));
 
-        String username = newUser.getUserName();
-        String password = newUser.getPassword() != null ? passwordEncoder.encode(newUser.getPassword()) : user.getPassword();
+            String username = newUser.getUserName() != null ? newUser.getUserName() : null;
+            String password = newUser.getPassword() != null ? newUser.getPassword() : null;
 
-        if(username != null && username.length() > 0 && !Objects.equals(user.getUserName(), username)) {
-            user.setUserName(username);
-        } else if(Objects.equals(user.getUserName(), username)) {
-            throw new IllegalStateException(String.format("User with username %s already exists", username));
-        }
+            if(username != null && username.length() > 0 && !Objects.equals(user.getUserName(), username)) {
+                Optional<User> userOptional = userRepository.findByUserNameEqualsIgnoreCase(username);
+                if (userOptional.isEmpty()) {
+                    user.setUserName(username);
+                } else {
+                    throw new IllegalStateException(String.format("User with username %s already exists, please choose another username", username));
+                }
+            } else if(Objects.equals(user.getUserName(), username)) {
+                throw new IllegalStateException("you cannot choose the same username");
+            };
 
-        if(password != null && password.length() > 0 && !Objects.equals(user.getPassword(), password)) {
-            user.setPassword(password);
+            if(password != null && password.length() > 0 && !passwordEncoder.matches(password, user.getPassword())) {
+                user.setPassword(passwordEncoder.encode(password));
+            } else if(password != null && passwordEncoder.matches(password, user.getPassword())) {
+                throw new IllegalStateException("you cannot choose the same password");
+            }
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e);
         }
     }
 
