@@ -1,0 +1,34 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${JDBC_DATABASE_URL}
+  jpa:
+    properties:
+      hibernate:
+        globally_quoted_identifiers: 'true'
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      show-sql: 'true'a
+      ddl-auto: update
+  security:
+    user:
+      name: user
+      password: password
+  application:
+    name: fw-auth-service
+application:
+  jwt:
+    tokenPrefix: 'Bearer '
+    tokenExpirationAfterDays: '10'
+    secretKey: securesecuresecuresecuresecuresecuresecuresecuresecure
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_URL:http://user:password@localhost:5000}/eureka/
+  instance:
+    hostname: ${DOMAIN_NAME}
+    nonSecurePort: 80
+  password: ${USER_PASSWORD:password}
+security:
+  user:
+    password: ${eureka.password}
