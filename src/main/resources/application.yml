@@ -8,7 +8,7 @@ spring:
         globally_quoted_identifiers: 'true'
         dialect: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      show-sql: 'true'a
+      show-sql: 'true'
       ddl-auto: update
   security:
     user:
