@@ -53,8 +53,8 @@ public class UserService {
                 user.setPassword(encryptedPassword);
                 userRepository.save(user);
                 Long userId = user.getId();
-              //  RegisterRequest registerRequest = new RegisterRequest(userId, user.getUserType());
-              //  restTemplate.postForObject("http://fw-profile-service/api/influencer", registerRequest, RegisterRequest.class);
+                RegisterRequest registerRequest = new RegisterRequest(userId, user.getUserType());
+                restTemplate.postForObject("http://fw-profile-service/api/influencer", registerRequest, RegisterRequest.class);
             } else {
                 throw new IllegalStateException(String.format("User with username %s already exists", userOptional.get().getUserName()));
             }
