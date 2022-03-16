@@ -38,7 +38,7 @@ public class UserController {
 
     @PostMapping(path = "email")
     public boolean checkEmail(@RequestBody String email) {
-       return userService.checkEmailAlreadyExists(email);
+       return userService.checkEmailAvailable(email);
     }
 
     @PutMapping(path = "{userId}")

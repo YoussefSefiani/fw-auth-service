@@ -40,9 +40,9 @@ public class UserService {
 
     }
 
-    public boolean checkEmailAlreadyExists(String email) {
+    public boolean checkEmailAvailable(String email) {
        Optional<User> userOptional = userRepository.findByEmailEqualsIgnoreCase(email);
-       return userOptional.isPresent();
+       return userOptional.isEmpty();
     }
 
     public void registerUser(User user) {
