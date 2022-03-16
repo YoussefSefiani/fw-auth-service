@@ -42,6 +42,7 @@ public class UserService {
 
     public boolean checkEmailAvailable(String email) {
        Optional<User> userOptional = userRepository.findByEmailEqualsIgnoreCase(email);
+       System.out.printf("userOptional email: %s", email );
        return userOptional.isEmpty();
     }
 
