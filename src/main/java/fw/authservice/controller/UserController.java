@@ -36,6 +36,11 @@ public class UserController {
         userService.registerUser(user);
     }
 
+    @PostMapping(path = "email")
+    public boolean checkEmail(@RequestBody String email) {
+       return userService.checkEmailAlreadyExists(email);
+    }
+
     @PutMapping(path = "{userId}")
     public void updateUser(@PathVariable("userId") Long userId, @RequestBody User user) {
         userService.updateUser(userId, user);

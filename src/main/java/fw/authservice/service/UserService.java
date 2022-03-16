@@ -39,6 +39,12 @@ public class UserService {
                 ));
 
     }
+
+    public boolean checkEmailAlreadyExists(String email) {
+       Optional<User> userOptional = userRepository.findByEmailEqualsIgnoreCase(email);
+       return userOptional.isPresent();
+    }
+
     public void registerUser(User user) {
 
             System.out.println(user);
