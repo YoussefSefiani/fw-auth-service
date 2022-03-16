@@ -39,8 +39,8 @@ public class UserService {
                 ));
 
     }
-    public void registerUser(User user) throws Exception {
-        try {
+    public void registerUser(User user) {
+
             System.out.println(user);
             Optional<User> userOptional = userRepository.findByUserNameEqualsIgnoreCase(user.getUserName());
             System.out.println(userOptional);
@@ -58,14 +58,10 @@ public class UserService {
             } else {
                 throw new IllegalStateException(String.format("User with username %s already exists", userOptional.get().getUserName()));
             }
-        } catch (Exception e) {
-            throw new IllegalArgumentException(e);
         }
-    }
 
     @Transactional
     public void updateUser(Long userId, User newUser) {
-        try {
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new IllegalStateException(
                             "user with id" + userId + "does not exist"
@@ -90,10 +86,7 @@ public class UserService {
             } else if(password != null && passwordEncoder.matches(password, user.getPassword())) {
                 throw new IllegalStateException("you cannot choose the same password");
             }
-        } catch (Exception e) {
-            throw new IllegalArgumentException(e);
         }
-    }
 
     public boolean checkUsername(User user) {
         Optional<User> userOptional = userRepository
