@@ -85,7 +85,5 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 influencer
         );
     }
-
-
 }
 
