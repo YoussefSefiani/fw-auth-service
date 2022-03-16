@@ -36,8 +36,8 @@ public class UserController {
         userService.registerUser(user);
     }
 
-    @PostMapping(path = "email")
-    public boolean checkEmail(@RequestBody String email) {
+    @PostMapping(path = "email/{email}")
+    public boolean checkEmailAvailable(@PathVariable("email") String email) {
        return userService.checkEmailAvailable(email);
     }
 

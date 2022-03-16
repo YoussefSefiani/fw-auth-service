@@ -1,0 +1,36 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/db_fw_auth_service
+    username: postgres
+    password: root
+  jpa:
+    properties:
+      hibernate:
+        globally_quoted_identifiers: 'true'
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      show-sql: 'true'
+      ddl-auto: update
+  security:
+    user:
+      name: user
+      password: password
+  application:
+    name: fw-auth-service
+application:
+  jwt:
+    tokenPrefix: 'Bearer '
+    tokenExpirationAfterDays: '10'
+    secretKey: securesecuresecuresecuresecuresecuresecuresecuresecure
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: https://user:finalwork@fw-discovery-server.herokuapp.com/eureka/
+  instance:
+    hostname: fw-auth-service.herokuapp.com
+    nonSecurePort: 80
+  password: ${USER_PASSWORD:password}
+security:
+  user:
+    password: ${eureka.password}
