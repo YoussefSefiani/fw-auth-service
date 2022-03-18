@@ -4,9 +4,10 @@ package fw.authservice.controller;
 import fw.authservice.model.User;
 import fw.authservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.ws.rs.Path;
 import java.util.List;
 
 @RestController
@@ -51,6 +52,9 @@ public class UserController {
         userService.deleteUser(userId);
     }
 
-
+    @GetMapping(path = "current")
+    public User getConnectedUser() {
+       return userService.getConnectedUser();
+    }
 
 }

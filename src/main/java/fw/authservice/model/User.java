@@ -2,6 +2,7 @@ package fw.authservice.model;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -37,7 +38,7 @@ public class User {
     private String userName;
 
     @NotBlank(message = "password must be not empty")
-   // @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
    // @Column(unique = true)
