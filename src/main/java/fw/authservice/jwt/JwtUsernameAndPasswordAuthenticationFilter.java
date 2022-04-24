@@ -1,6 +1,7 @@
 package fw.authservice.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fw.authservice.service.UserService;
 import io.jsonwebtoken.Jwts;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,13 +23,15 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
     private AuthenticationManager authenticationManager;
     private final JwtConfig jwtConfig;
     private final SecretKey secretKey;
+    private final UserService userService;
 
     public JwtUsernameAndPasswordAuthenticationFilter(AuthenticationManager authenticationManager,
                                                       JwtConfig jwtConfig,
-                                                      SecretKey secretKey) {
+                                                      SecretKey secretKey, UserService userService) {
         this.authenticationManager = authenticationManager;
         this.jwtConfig = jwtConfig;
         this.secretKey = secretKey;
+        this.userService = userService;
     }
 
 
@@ -41,7 +44,6 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
 
             System.out.println(authenticationRequest.getUsername());
             System.out.println(authenticationRequest.getPassword());
-
             Authentication authentication = new UsernamePasswordAuthenticationToken(
                     authenticationRequest.getUsername(),
                     authenticationRequest.getPassword()
@@ -61,7 +63,7 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
                                             FilterChain chain,
                                             Authentication authResult) throws IOException, ServletException {
         String token = Jwts.builder()
-                .setSubject(authResult.getName())
+                .setSubject(userService.getUserIdByUserName(authResult.getName()).toString())
                 .claim("authorities", authResult.getAuthorities())
                 .setIssuedAt(new Date())
                 .setExpiration(java.sql.Date.valueOf(LocalDate.now().plusDays(jwtConfig.getTokenExpirationAfterDays())))

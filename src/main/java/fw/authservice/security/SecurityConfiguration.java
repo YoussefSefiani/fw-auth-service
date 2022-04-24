@@ -3,13 +3,12 @@ package fw.authservice.security;
 import fw.authservice.jwt.JwtConfig;
 import fw.authservice.jwt.JwtTokenVerifier;
 import fw.authservice.jwt.JwtUsernameAndPasswordAuthenticationFilter;
-import fw.authservice.service.MyUserDetailsService;
+import fw.authservice.repository.UserRepository;
 import fw.authservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -33,13 +32,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
     private final SecretKey secretKey;
     private final JwtConfig jwtConfig;
+    private final UserService userService;
 
     @Autowired
-    public SecurityConfiguration(PasswordEncoder passwordEncoder, UserDetailsService userDetailsService, SecretKey secretKey, JwtConfig jwtConfig) {
+    public SecurityConfiguration(PasswordEncoder passwordEncoder, UserDetailsService userDetailsService, SecretKey secretKey, JwtConfig jwtConfig, UserRepository userRepository, UserService userService) {
         this.passwordEncoder = passwordEncoder;
         this.userDetailsService = userDetailsService;
         this.secretKey = secretKey;
         this.jwtConfig = jwtConfig;
+        this.userService = userService;
     }
 
     @Override
@@ -57,13 +58,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and()
-                    .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig, secretKey)) // authentificationManager comes from extended class
+                    .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig, secretKey, userService)) // authentificationManager comes from extended class
                     .addFilterAfter(new JwtTokenVerifier(secretKey, jwtConfig), JwtUsernameAndPasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET,"/api/user").hasAuthority("USER")
                 .antMatchers(HttpMethod.POST,"/api/user/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/register").permitAll()
                 .antMatchers(HttpMethod.POST, "/login").permitAll()
+                .antMatchers(HttpMethod.GET, "/actuator/health").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()

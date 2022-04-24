@@ -22,6 +22,12 @@ public class UserController {
         this.userService = userService;
     }
 
+
+    @GetMapping(path = "check")
+    public boolean checkUserAuthenticated(@RequestHeader("Authorization") String token) {
+        return userService.checkUserAuthenticated(token);
+    }
+
     @GetMapping
     public List<User> getUsers() {
         return userService.getUsers();
@@ -56,5 +62,6 @@ public class UserController {
     public User getConnectedUser() {
        return userService.getConnectedUser();
     }
+
 
 }
