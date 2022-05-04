@@ -15,19 +15,11 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
-//@EnableAutoConfiguration(exclude={UserDetailsServiceAutoConfiguration.class})
+@EnableAutoConfiguration(exclude={UserDetailsServiceAutoConfiguration.class})
 @EnableJpaRepositories(basePackageClasses = UserRepository.class)
 @EnableEurekaClient
 @EnableFeignClients
 public class AuthServiceApplication {
-
-	@Bean
-	@LoadBalanced
-	public RestTemplate getRestTemplate() {
-		HttpComponentsClientHttpRequestFactory clientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory();
-		//clientHttpRequestFactory.setConnectTimeout(3000);
-		return new RestTemplate(clientHttpRequestFactory);
-	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(AuthServiceApplication.class, args);

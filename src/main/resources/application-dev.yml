@@ -26,11 +26,20 @@ application:
 eureka:
   client:
     serviceUrl:
-      defaultZone: https://user:finalwork@fw-discovery-server.herokuapp.com/eureka/
+      defaultZone: http://user:finalwork@localhost:8761/eureka/
   instance:
-    hostname: fw-auth-service.herokuapp.com
-    nonSecurePort: 80
+    hostname: localhost
+    secure-port-enabled: true
+    non-secure-port-enabled: false
   password: ${USER_PASSWORD:password}
 security:
   user:
     password: ${eureka.password}
+feign:
+  httpclient:
+    disable-ssl-validation: true
+
+app:
+  services:
+    profile:
+      url: http://localhost:8081

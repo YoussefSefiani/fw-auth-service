@@ -24,7 +24,7 @@ application:
 eureka:
   client:
     serviceUrl:
-      defaultZone: ${EUREKA_URL:http://user:password@localhost:5000}/eureka/
+      defaultZone: ${EUREKA_URL:http://user:password@localhost:8761}/eureka/
   instance:
     hostname: ${DOMAIN_NAME}
     nonSecurePort: 80
@@ -32,3 +32,8 @@ eureka:
 security:
   user:
     password: ${eureka.password}
+
+app:
+  services:
+    profile:
+      url: https://fw-profile-service.herokuapp.com

@@ -61,8 +61,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig, secretKey, userService)) // authentificationManager comes from extended class
                     .addFilterAfter(new JwtTokenVerifier(secretKey, jwtConfig), JwtUsernameAndPasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET,"/api/user").hasAuthority("USER")
-                .antMatchers(HttpMethod.POST,"/api/user/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/api/user").permitAll()
                 .antMatchers(HttpMethod.POST, "/login").permitAll()
                 .antMatchers(HttpMethod.GET, "/actuator/health").permitAll()
                 .anyRequest()
@@ -72,19 +71,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 
 
-    }
-
-    @Override
-    @Bean
-    protected UserDetailsService userDetailsService() {
-        UserDetails influencer = User.builder()
-                .username("influencer")
-                .password(passwordEncoder.encode("password"))
-                .roles("USER")
-                .build();
-        return new InMemoryUserDetailsManager(
-                influencer
-        );
     }
 }
 

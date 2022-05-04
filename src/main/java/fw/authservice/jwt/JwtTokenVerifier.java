@@ -57,7 +57,6 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
             Claims body = claimsJws.getBody();
 
             String username = body.getSubject();
-            System.out.println("claim "+claimsJws);
 
             var authorities =  (List<Map<String, String>>) body.get("authorities");
 

@@ -1,5 +1,6 @@
 package fw.authservice.service;
 
+import fw.authservice.feign.ProfileRestConsumer;
 import fw.authservice.model.*;
 import fw.authservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
@@ -20,15 +20,17 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    private final RestTemplate restTemplate;
+    //private final RestTemplate restTemplate;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ProfileRestConsumer consumer;
 
     @Autowired
-    public UserService(RestTemplate restTemplate, UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.restTemplate = restTemplate;
+    public UserService(/*RestTemplate restTemplate,*/ UserRepository userRepository, PasswordEncoder passwordEncoder, ProfileRestConsumer consumer) {
+        //this.restTemplate = restTemplate;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.consumer = consumer;
     }
 
     public Long getConnectedUserId() {
@@ -78,21 +80,26 @@ public class UserService {
 
     public void registerUser(User user) {
 
-        System.out.println(user);
+
         Optional<User> userOptional = userRepository.findByUserNameEqualsIgnoreCase(user.getUserName());
         System.out.println(userOptional);
 
         if (userOptional.isEmpty()) {
-            //TODO: add roles and active 'true' here instead of in request body
             System.out.println(user.getBirthdate());
             Date newBirthDate = new Date(user.getBirthdate().getYear(), user.getBirthdate().getMonth(), user.getBirthdate().getDay());
             user.setBirthdate(newBirthDate);
             String encryptedPassword = passwordEncoder.encode(user.getPassword());
             user.setPassword(encryptedPassword);
+            user.setActive(true);
+            user.setRoles("USER");
+            //TODO: change rating implementation (maybe in profile service)
+            user.setRating(0);
             userRepository.save(user);
             Long userId = user.getId();
             RegisterRequest registerRequest = new RegisterRequest(userId, user.getUserType());
-            restTemplate.postForObject("http://fw-profile-service/api/influencer", registerRequest, RegisterRequest.class);
+           // restTemplate.postForObject("http://fw-profile-service/api/influencer", registerRequest, RegisterRequest.class);
+            consumer.registerInfluencer(registerRequest);
+            System.out.println("AFTER RESTTEMPLATE " + user);
         } else {
             throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("User with username %s already exists", userOptional.get().getUserName()));
         }
@@ -129,15 +136,6 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "You cannot choose the same password");
         }
     }
-
-//    public boolean checkUsername(User user) {
-//        Optional<User> userOptional = userRepository
-//                .findByUserNameEqualsIgnoreCase(user.getUserName());
-//        if (userOptional.isPresent()) {
-//            throw new IllegalStateException("username already taken");
-//        }
-//        return true;
-//    }
 
     public void deleteUser(Long userId) {
         boolean exists = userRepository.existsById(userId);
