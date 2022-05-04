@@ -71,6 +71,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .httpBasic();
 
 
+
     }
 
     @Override
@@ -81,7 +82,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .password(passwordEncoder.encode("password"))
                 .roles("USER")
                 .build();
-
         return new InMemoryUserDetailsManager(
                 influencer
         );
