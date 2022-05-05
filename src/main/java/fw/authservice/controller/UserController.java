@@ -11,7 +11,7 @@ import java.util.List;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
-@RequestMapping(path = "api/user",produces=MediaType.APPLICATION_JSON)
+@RequestMapping(path = "api/user")
 public class UserController {
 
     private final UserService userService;
