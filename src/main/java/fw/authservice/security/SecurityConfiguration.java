@@ -1,6 +1,5 @@
 package fw.authservice.security;
 
-import fw.authservice.configuration.NoPopupBasicAuthenticationEntryPoint;
 import fw.authservice.jwt.JwtConfig;
 import fw.authservice.jwt.JwtTokenVerifier;
 import fw.authservice.jwt.JwtUsernameAndPasswordAuthenticationFilter;
@@ -48,6 +47,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
         http
                 .cors()
                 .and()
@@ -59,14 +59,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig, secretKey, userService)) // authentificationManager comes from extended class
                     .addFilterAfter(new JwtTokenVerifier(secretKey, jwtConfig), JwtUsernameAndPasswordAuthenticationFilter.class)
                 .authorizeRequests()
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .antMatchers(HttpMethod.POST,"/api/user").permitAll()
                 .antMatchers(HttpMethod.POST, "/login").permitAll()
                 .antMatchers(HttpMethod.GET, "/actuator/health").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
-                .httpBasic()
-                .authenticationEntryPoint(new NoPopupBasicAuthenticationEntryPoint());
+                .httpBasic();
 
 
 
