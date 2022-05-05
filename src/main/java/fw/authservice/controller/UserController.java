@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+@CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*", allowCredentials = "true")
 @RestController
 @RequestMapping(path = "api/user")
 public class UserController {
