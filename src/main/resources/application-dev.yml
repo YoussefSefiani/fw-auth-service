@@ -43,3 +43,7 @@ app:
   services:
     profile:
       url: http://localhost:8081
+
+server:
+  error:
+    include-message: always

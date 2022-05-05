@@ -37,3 +37,7 @@ app:
   services:
     profile:
       url: https://fw-profile-service.herokuapp.com
+
+server:
+  error:
+    include-message: always
