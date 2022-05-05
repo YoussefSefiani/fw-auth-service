@@ -80,7 +80,6 @@ public class UserService {
 
     public void registerUser(User user) {
 
-
         Optional<User> userOptional = userRepository.findByUserNameEqualsIgnoreCase(user.getUserName());
         System.out.println(userOptional);
 
