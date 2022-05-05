@@ -1,5 +1,6 @@
 package fw.authservice.security;
 
+import fw.authservice.configuration.NoPopupBasicAuthenticationEntryPoint;
 import fw.authservice.jwt.JwtConfig;
 import fw.authservice.jwt.JwtTokenVerifier;
 import fw.authservice.jwt.JwtUsernameAndPasswordAuthenticationFilter;
@@ -64,7 +65,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                 .authenticated()
                 .and()
-                .httpBasic();
+                .httpBasic()
+                .authenticationEntryPoint(new NoPopupBasicAuthenticationEntryPoint());
 
 
 
