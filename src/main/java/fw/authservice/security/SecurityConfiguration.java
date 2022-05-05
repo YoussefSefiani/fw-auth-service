@@ -56,10 +56,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         http
                 .cors()
-                .configurationSource(corsConfigurationSource())
                 .and()
                 .csrf()
-                .and()
+                .disable()
                     .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and()
@@ -75,16 +74,5 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .httpBasic();
     }
-
-        @Bean
-        CorsConfigurationSource corsConfigurationSource() {
-            CorsConfiguration configuration = new CorsConfiguration();
-            configuration.setAllowedOrigins(Arrays.asList("*"));
-            configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE"));
-            configuration.setAllowedHeaders(Collections.singletonList("*"));
-            UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-            source.registerCorsConfiguration("/**", configuration);
-            return source;
-        }
 }
 
