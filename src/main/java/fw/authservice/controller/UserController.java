@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-@CrossOrigin(origins="fw-front-end.herokuapp.com", allowedHeaders="*", allowCredentials="true")
+@CrossOrigin(origins="https://fw-front-end.herokuapp.com")
 @RestController
 @RequestMapping(path = "api/user")
 public class UserController {
