@@ -6,11 +6,12 @@ import fw.authservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
-@RequestMapping(path = "api/user")
+@RequestMapping(path = "api/user",produces=MediaType.APPLICATION_JSON)
 public class UserController {
 
     private final UserService userService;
@@ -26,7 +27,7 @@ public class UserController {
         return userService.checkUserAuthenticated(token);
     }
 
-    @GetMapping(path="")
+    @GetMapping
     public List<User> getUsers() {
         return userService.getUsers();
     }
