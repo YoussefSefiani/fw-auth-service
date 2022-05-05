@@ -31,6 +31,7 @@ public class UserController {
         return userService.getUsers();
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping(path = "{userId}")
     public User getUser(@PathVariable("userId") Long userId) {
         return userService.getUser(userId);
