@@ -26,12 +26,12 @@ public class UserController {
         return userService.checkUserAuthenticated(token);
     }
 
-    @GetMapping
+    @GetMapping(path="")
     public List<User> getUsers() {
         return userService.getUsers();
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "{userId}")
+    @GetMapping(path = "{userId}")
     public User getUser(@PathVariable("userId") Long userId) {
         return userService.getUser(userId);
     }
