@@ -74,8 +74,10 @@ public class UserService {
 
     public boolean checkEmailAvailable(String email) {
         Optional<User> userOptional = userRepository.findByEmailEqualsIgnoreCase(email);
-        System.out.println("userOptional is: " + userOptional.isEmpty());
-        return userOptional.isEmpty();
+        if(userOptional.isEmpty()) {
+            return true;
+        }
+        throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("User with email %s already exists", userOptional.get().getEmail()));
     }
 
     public void registerUser(User user) {
