@@ -17,9 +17,9 @@ public class WebConfiguration implements WebMvcConfigurer {
                 .allowedOriginPatterns("*");
     }
 
-//    @Override
-//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//        registry.addResourceHandler("/**");
-//    }
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/**");
+    }
 
 }
