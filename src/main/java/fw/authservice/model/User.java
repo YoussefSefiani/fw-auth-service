@@ -51,8 +51,8 @@ public class User {
     private String address;
 
     @Temporal(TemporalType.DATE)
-    @DateTimeFormat(style = "yyyy:dd:MM")
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy:dd:MM")
+    @DateTimeFormat(style = "yyyy-MM-dd")
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     private Date birthdate;
 
     private String profilePicture;
