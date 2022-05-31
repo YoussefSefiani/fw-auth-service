@@ -27,6 +27,7 @@ public class UserController {
         return userService.getAllPartnershipBrandNames(brandIds.getBrandIds());
     }
 
+
     @GetMapping(path = "check")
     public boolean checkUserAuthenticated(@RequestHeader("Authorization") String token) {
         return userService.checkUserAuthenticated(token);
