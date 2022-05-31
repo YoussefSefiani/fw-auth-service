@@ -1,10 +1,13 @@
 package fw.authservice.controller;
 
 
+import fw.authservice.model.BrandIdWrapper;
 import fw.authservice.model.User;
 import fw.authservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 import java.util.List;
 
 //@CrossOrigin(origins="*")
@@ -19,6 +22,10 @@ public class UserController {
         this.userService = userService;
     }
 
+    @PostMapping(path = "names")
+    public HashMap<Long, String> getAllPartnershipBrandNames(@RequestBody BrandIdWrapper brandIds) {
+        return userService.getAllPartnershipBrandNames(brandIds.getBrandIds());
+    }
 
     @GetMapping(path = "check")
     public boolean checkUserAuthenticated(@RequestHeader("Authorization") String token) {

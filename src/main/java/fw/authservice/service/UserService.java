@@ -12,10 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -151,6 +148,19 @@ public class UserService {
                     String.format("User with id %s does not exist", userId));
         }
         userRepository.deleteById(userId);
+    }
+
+    public HashMap<Long, String> getAllPartnershipBrandNames(List<Long> brandIds) {
+        System.out.println(brandIds);
+        List<User> brands = userRepository.findByIdIn(brandIds);
+        HashMap<Long, String> brandMap = new HashMap<>();
+        System.out.println(brands);
+
+        brands.forEach(brand -> {
+            brandMap.putIfAbsent(brand.getId(), brand.getUserName());
+        });
+        System.out.println("klew");
+        return brandMap;
     }
 
 
