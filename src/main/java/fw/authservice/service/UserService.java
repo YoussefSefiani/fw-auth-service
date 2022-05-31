@@ -20,14 +20,12 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    //private final RestTemplate restTemplate;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final ProfileRestConsumer consumer;
 
     @Autowired
-    public UserService(/*RestTemplate restTemplate,*/ UserRepository userRepository, PasswordEncoder passwordEncoder, ProfileRestConsumer consumer) {
-        //this.restTemplate = restTemplate;
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, ProfileRestConsumer consumer) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.consumer = consumer;
@@ -96,11 +94,18 @@ public class UserService {
             //TODO: change rating implementation (maybe in profile service)
             user.setRating(0);
             userRepository.save(user);
+
             Long userId = user.getId();
-            RegisterRequest registerRequest = new RegisterRequest(userId, user.getUserType());
-           // restTemplate.postForObject("http://fw-profile-service/api/influencer", registerRequest, RegisterRequest.class);
-            consumer.registerInfluencer(registerRequest);
-            System.out.println("AFTER RESTTEMPLATE " + user);
+            UserType userType = user.getUserType();
+
+            if(userType.equals(UserType.INFLUENCER)) {
+                RegisterRequest registerRequest = new RegisterRequest(userId, userType);
+                consumer.registerInfluencer(registerRequest);
+                return;
+            }
+            RegisterRequest registerRequest = new RegisterRequest(userId, userType);
+            consumer.registerBrand(registerRequest);
+
         } else {
             throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("User with username %s already exists", userOptional.get().getUserName()));
         }

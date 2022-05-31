@@ -13,4 +13,7 @@ public interface ProfileRestConsumer {
     @PostMapping("/api/influencer")
     void registerInfluencer(@RequestBody RegisterRequest registerRequest);
 
+    @PostMapping("/api/brand")
+    void registerBrand(@RequestBody RegisterRequest registerRequest);
+
 }
