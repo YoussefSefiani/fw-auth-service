@@ -2,6 +2,7 @@ package fw.authservice.controller;
 
 
 import fw.authservice.model.BrandIdWrapper;
+import fw.authservice.model.CredentialsAvailable;
 import fw.authservice.model.User;
 import fw.authservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,9 +49,9 @@ public class UserController {
         userService.registerUser(user);
     }
 
-    @PostMapping(path = "email/{email}")
-    public boolean checkEmailAvailable(@PathVariable("email") String email) {
-       return userService.checkEmailAvailable(email);
+    @PostMapping(path = "available")
+    public boolean checkAvailable(@RequestBody CredentialsAvailable credentials) {
+       return userService.checkAvailable(credentials);
     }
 
     @PutMapping(path = "{userId}")

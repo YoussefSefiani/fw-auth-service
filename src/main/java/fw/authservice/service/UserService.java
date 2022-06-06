@@ -68,21 +68,23 @@ public class UserService {
         return true;
     }
 
-    public boolean checkEmailAvailable(String email) {
-        Optional<User> userOptional = userRepository.findByEmailEqualsIgnoreCase(email);
-        if(userOptional.isEmpty()) {
+    public boolean checkAvailable(CredentialsAvailable credentials) {
+        Optional<User> userOptionalEmail = userRepository.findByEmailEqualsIgnoreCase(credentials.getEmail());
+        Optional<User> userOptionalUserName = userRepository.findByUserNameEqualsIgnoreCase(credentials.getUserName());
+        if(userOptionalEmail.isEmpty() && userOptionalUserName.isEmpty()) {
             return true;
+        } else if(userOptionalEmail.isPresent() && userOptionalUserName.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "email");
+        } else if(userOptionalUserName.isPresent() && userOptionalEmail.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "username");
+        } else {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "both");
         }
-        throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("User with email %s already exists", userOptional.get().getEmail()));
     }
 
+
+
     public void registerUser(User user) {
-
-        Optional<User> userOptional = userRepository.findByUserNameEqualsIgnoreCase(user.getUserName());
-        System.out.println(userOptional);
-
-        if (userOptional.isEmpty()) {
-            System.out.println(user.getBirthdate());
             Date newBirthDate = new Date(user.getBirthdate().getYear(), user.getBirthdate().getMonth(), user.getBirthdate().getDay());
             user.setBirthdate(newBirthDate);
             String encryptedPassword = passwordEncoder.encode(user.getPassword());
@@ -102,10 +104,6 @@ public class UserService {
             }
             RegisterRequest registerRequest = new RegisterRequest(userId, userType);
             consumer.registerBrand(registerRequest);
-
-        } else {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("User with username %s already exists", userOptional.get().getUserName()));
-        }
     }
 
     @Transactional
