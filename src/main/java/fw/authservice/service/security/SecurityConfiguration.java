@@ -1,4 +1,4 @@
-package fw.authservice.security;
+package fw.authservice.service.security;
 
 import fw.authservice.jwt.JwtConfig;
 import fw.authservice.jwt.JwtTokenVerifier;

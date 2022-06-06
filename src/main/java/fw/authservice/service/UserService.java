@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
@@ -88,7 +89,6 @@ public class UserService {
             user.setPassword(encryptedPassword);
             user.setActive(true);
             user.setRoles("USER");
-            //TODO: change rating implementation (maybe in profile service)
             user.setRating(0);
             userRepository.save(user);
 
@@ -117,12 +117,12 @@ public class UserService {
                 );
 
         String username = newUser.getUserName() != null ? newUser.getUserName() : null;
-        String password = newUser.getPassword() != null ? newUser.getPassword() : null;
+        boolean isAvailable = false;
 
         if (username != null && username.length() > 0 && !Objects.equals(user.getUserName(), username)) {
             Optional<User> userOptional = userRepository.findByUserNameEqualsIgnoreCase(username);
             if (userOptional.isEmpty()) {
-                user.setUserName(username);
+                isAvailable = true;
             } else {
                 throw new ResponseStatusException(
                         HttpStatus.CONFLICT,
@@ -131,13 +131,12 @@ public class UserService {
         } else if (Objects.equals(user.getUserName(), username)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "You cannot choose the same username");
         }
-        ;
 
-        if (password != null && password.length() > 0 && !passwordEncoder.matches(password, user.getPassword())) {
-            user.setPassword(passwordEncoder.encode(password));
-        } else if (password != null && passwordEncoder.matches(password, user.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "You cannot choose the same password");
+        if(isAvailable) {
+            user.updateUser(newUser);
         }
+
+        userRepository.save(user);
     }
 
     public void deleteUser(Long userId) {
@@ -159,9 +158,7 @@ public class UserService {
         brands.forEach(brand -> {
             brandMap.putIfAbsent(brand.getId(), brand.getUserName());
         });
-        System.out.println("klew");
+
         return brandMap;
     }
-
-
 }
