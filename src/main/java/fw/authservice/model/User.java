@@ -26,14 +26,14 @@ public class User {
     )
     private Long id;
 
-    public User(String firstName, String lastName, String userName, String address) {
-
+    public User(String address, String city, int postalCode, CountryList country) {
+        this.address = address;
+        this.city = city;
+        this.postalCode = postalCode;
+        this.country = country;
     }
 
     public void updateUser(User user) {
-        this.firstName = user.getFirstName();
-        this.lastName = user.getLastName();
-        this.userName = user.getUserName();
         this.address = user.getAddress();
         this.city = user.getCity();
         this.postalCode = user.getPostalCode();

@@ -114,27 +114,7 @@ public class UserService {
                         HttpStatus.NOT_FOUND,
                         String.format("User with id %s does not exist", userId))
                 );
-
-        String username = newUser.getUserName() != null ? newUser.getUserName() : null;
-        boolean isAvailable = false;
-
-        if (username != null && username.length() > 0 && !Objects.equals(user.getUserName(), username)) {
-            Optional<User> userOptional = userRepository.findByUserNameEqualsIgnoreCase(username);
-            if (userOptional.isEmpty()) {
-                isAvailable = true;
-            } else {
-                throw new ResponseStatusException(
-                        HttpStatus.CONFLICT,
-                        String.format("User with username %s already exists", username));
-            }
-        } else if (Objects.equals(user.getUserName(), username)) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "You cannot choose the same username");
-        }
-
-        if(isAvailable) {
-            user.updateUser(newUser);
-        }
-
+        user.updateUser(newUser);
         userRepository.save(user);
     }
 
