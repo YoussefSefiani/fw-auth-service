@@ -87,6 +87,7 @@ public class UserService {
     public void registerUser(User user) {
             Date newBirthDate = new Date(user.getBirthdate().getYear(), user.getBirthdate().getMonth(), user.getBirthdate().getDay());
             user.setBirthdate(newBirthDate);
+
             String encryptedPassword = passwordEncoder.encode(user.getPassword());
             user.setPassword(encryptedPassword);
             user.setActive(true);
