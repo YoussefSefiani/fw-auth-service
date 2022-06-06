@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
-
 @FeignClient(name="fw-profile-service", url="${app.services.profile.url}")
 public interface ProfileRestConsumer {
 
