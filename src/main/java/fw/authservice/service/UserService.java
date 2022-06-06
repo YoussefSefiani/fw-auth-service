@@ -140,4 +140,17 @@ public class UserService {
 
         return brandMap;
     }
+
+    public HashMap<Long, String> getAllPartnershipInfluencerNames(List<Long> influencerIds) {
+        System.out.println(influencerIds);
+        List<User> influencers = userRepository.findByIdIn(influencerIds);
+        HashMap<Long, String> influencerMap = new HashMap<>();
+        System.out.println(influencers);
+
+        influencers.forEach(influencer -> {
+            influencerMap.putIfAbsent(influencer.getId(), influencer.getUserName());
+        });
+
+        return influencerMap;
+    }
 }

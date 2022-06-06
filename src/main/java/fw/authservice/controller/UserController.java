@@ -3,6 +3,7 @@ package fw.authservice.controller;
 
 import fw.authservice.model.BrandIdWrapper;
 import fw.authservice.model.CredentialsAvailable;
+import fw.authservice.model.InfluencerIdWrapper;
 import fw.authservice.model.User;
 import fw.authservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +24,14 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping(path = "names")
+    @PostMapping(path = "brandnames")
     public HashMap<Long, String> getAllPartnershipBrandNames(@RequestBody BrandIdWrapper brandIds) {
         return userService.getAllPartnershipBrandNames(brandIds.getBrandIds());
+    }
+
+    @PostMapping(path = "influencernames")
+    public HashMap<Long, String> getAllPartnershipInfluencerNames(@RequestBody InfluencerIdWrapper influencerIds) {
+        return userService.getAllPartnershipInfluencerNames(influencerIds.getInfluencerIds());
     }
 
 
