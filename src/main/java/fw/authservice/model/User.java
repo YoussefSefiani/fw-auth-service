@@ -59,6 +59,8 @@ public class User {
     @Email
     private String email;
 
+    private Gender gender;
+
    // @Column(unique = true)
     private String phoneNumber;
     private String address;
