@@ -24,6 +24,11 @@ public class UserController {
         this.userService = userService;
     }
 
+    @GetMapping(path = "ping")
+    public String ping() {
+        return "pong";
+    }
+
     @PostMapping(path = "brandnames")
     public HashMap<Long, String> getAllPartnershipBrandNames(@RequestBody BrandIdWrapper brandIds) {
         return userService.getAllPartnershipBrandNames(brandIds.getBrandIds());
