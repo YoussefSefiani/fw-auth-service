@@ -24,7 +24,7 @@ application:
 eureka:
   client:
     serviceUrl:
-      defaultZone: https://user:finalwork@fw-discovery-server.azurewebsites.net
+      defaultZone: https://fw-discovery-server.azurewebsites.net
   instance:
     hostname: fw-auth-service.azurewebsites.net
     nonSecurePort: 80
