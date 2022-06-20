@@ -36,7 +36,7 @@ security:
 app:
   services:
     profile:
-      url: https://fw-profile-service.herokuapp.com
+      url: https://fw-profile-service.azurewebsites.net
 
 server:
   error:

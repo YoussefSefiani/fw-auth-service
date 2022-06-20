@@ -46,7 +46,6 @@ public class User {
     @NotBlank(message = "lastname must be not empty")
     private String lastName;
 
-   // @Column(unique = true)
     @NotBlank(message = "username must be not empty")
     @Column(unique = true)
     private String userName;
