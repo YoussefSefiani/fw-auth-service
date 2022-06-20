@@ -48,6 +48,7 @@ public class User {
 
    // @Column(unique = true)
     @NotBlank(message = "username must be not empty")
+    @Column(unique = true)
     private String userName;
 
     @NotBlank(message = "password must be not empty")
@@ -57,6 +58,7 @@ public class User {
    // @Column(unique = true)
     @NotBlank(message = "email must be not empty")
     @Email
+    @Column(unique = true)
     private String email;
 
     private Gender gender;
