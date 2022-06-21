@@ -22,7 +22,7 @@ public class User {
 
     @Id
     @GeneratedValue(
-            strategy = GenerationType.SEQUENCE
+            strategy = GenerationType.AUTO
     )
     private Long id;
 
@@ -47,14 +47,12 @@ public class User {
     private String lastName;
 
     @NotBlank(message = "username must be not empty")
-    @Column(unique = true)
     private String userName;
 
     @NotBlank(message = "password must be not empty")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-   // @Column(unique = true)
     @NotBlank(message = "email must be not empty")
     @Email
     @Column(unique = true)
@@ -62,7 +60,6 @@ public class User {
 
     private Gender gender;
 
-   // @Column(unique = true)
     private String phoneNumber;
     private String address;
     private String city;
