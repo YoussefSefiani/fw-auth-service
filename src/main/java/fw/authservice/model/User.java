@@ -22,7 +22,7 @@ public class User {
 
     @Id
     @GeneratedValue(
-            strategy = GenerationType.AUTO
+            strategy = GenerationType.SEQUENCE
     )
     private Long id;
 
